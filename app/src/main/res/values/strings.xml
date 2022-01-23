@@ -9,5 +9,5 @@
 
     <string name="menu_home">Home</string>
     <string name="login">Login</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_chats">Chats</string>
 </resources>

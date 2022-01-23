@@ -2,6 +2,7 @@ package com.example.doctorapp.ui.login
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.doctorapp.data.local.Prefs
 import com.example.doctorapp.firestore.Firestore
 import com.example.doctorapp.main.MainViewModel
 import com.example.doctorapp.models.RemoteResult
@@ -25,5 +26,9 @@ class LoginViewModel : MainViewModel() {
             }
         }
         return liveSignIn;
+    }
+
+    fun saveEmail(email: String) {
+        Prefs.saveString("email", email)
     }
 }

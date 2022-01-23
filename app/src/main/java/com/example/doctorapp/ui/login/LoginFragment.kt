@@ -45,7 +45,7 @@ class LoginFragment : Fragment() {
                         is RemoteResult.Loading -> loginViewModel.setLoading(true)
                         is RemoteResult.Success -> {
                             findNavController().navigate(R.id.nav_home)
-                            println(it.data?.user?.displayName)
+                           loginViewModel.saveEmail(it.data?.user?.email?:"")
                         }
                         is RemoteResult.Fail -> println(it.message)
                     }

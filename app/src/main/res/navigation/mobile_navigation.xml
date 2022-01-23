@@ -19,6 +19,11 @@
     <fragment
         android:id="@+id/nav_add_user"
         android:name="com.example.doctorapp.ui.add_user.AddUser"
-        android:label="@string/menu_slideshow"
+        android:label="Add User"
         tools:layout="@layout/fragment_add_user" />
+    <fragment
+        android:id="@+id/nav_chats"
+        android:name="com.example.doctorapp.ui.chats.ChatsFragment"
+        android:label="@string/menu_chats"
+        tools:layout="@layout/chats_fragment" />
 </navigation>
