@@ -118,15 +118,15 @@ object Firestore {
     }.flowOn(Dispatchers.IO)
 
     private suspend fun getChatDocs(email: String): String? {
-        return db.collection(USERS_COLLECTION).whereEqualTo("email", email)
+        return db.collection(CHAT_COLLECTION).whereEqualTo("patientEmail", email)
             .get()
             .await()?.documents?.first()?.id
     }
 
-    fun getChat() = callbackFlow {
+    fun getChat(email: String) = callbackFlow {
         send(RemoteResult.Loading)
         RemoteResult.success(
-            db.collection(CHAT_COLLECTION).document(getChatDocs(savedEmail?:"") ?:return@callbackFlow)
+            db.collection(CHAT_COLLECTION).document(getChatDocs(email) ?:return@callbackFlow)
                 .addSnapshotListener { value, error ->
                     value?.let {
                         val product = value.toObject(Chat::class.java)?:return@addSnapshotListener
@@ -142,7 +142,7 @@ object Firestore {
         emit(RemoteResult.Fail(it.message.toString()))
     }.flowOn(Dispatchers.IO)
 
-    fun updatePerfume(chat: Chat) = flow {
+    fun updatemessages(chat: Chat) = flow {
         emit(RemoteResult.Loading)
         db.collection(CHAT_COLLECTION)
             .document(getDocumentToModify(chat.patientEmail)!!)

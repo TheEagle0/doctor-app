@@ -50,7 +50,7 @@ class ChatsFragment : Fragment() {
     }
 
     private fun getUserChat() {
-        viewModel.getChats().observe(viewLifecycleOwner, {
+        viewModel.getChats(Prefs.getString("email")!!).observe(viewLifecycleOwner, {
             when (it) {
                 is RemoteResult.Success -> adapter.updateAdapter(listOf(it.data))
                 is RemoteResult.Fail -> Toast.makeText(context, "error", Toast.LENGTH_SHORT).show()

@@ -1,8 +1,10 @@
 package com.example.doctorapp.ui.chats
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.doctorapp.R
 import com.example.doctorapp.models.Chat
@@ -22,11 +24,9 @@ class ChatsAdapter(private val chats: MutableList<Chat>, val fragment: ChatsFrag
         with(holder.itemView) {
             name.text = chat.patientEmail
             this.setOnClickListener {
-//                fragment.findNavController().navigate(R.id.editProductFragment, Bundle().apply {
-//                    putString("name", product.name)
-//                    putString("company", product.company)
-//                    putString("id", product.id)
-//                })
+                fragment.findNavController().navigate(R.id.chatFragment, Bundle().apply {
+                    putString("mail", chat.patientEmail)
+                })
             }
 
         }

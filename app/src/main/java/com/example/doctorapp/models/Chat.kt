@@ -1,6 +1,7 @@
 package com.example.doctorapp.models
 
 import android.os.Parcelable
+import com.example.doctorapp.data.local.Prefs
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -11,4 +12,8 @@ data class Chat(
 ) : Parcelable
 
 @Parcelize
-data class Message(val time: Long = 0, val message: String = "") : Parcelable
+data class Message(
+    val time: Long = 0,
+    val message: String = "",
+    val sender: String = Prefs.getString("email")!!
+) : Parcelable

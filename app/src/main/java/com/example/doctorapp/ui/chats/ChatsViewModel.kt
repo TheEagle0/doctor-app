@@ -15,9 +15,9 @@ class ChatsViewModel : ViewModel() {
     private val liveAllChats = MutableLiveData<RemoteResult<out MutableList<Chat>>>()
 
 
-    fun getChats(): MutableLiveData<RemoteResult<out Chat>> {
+    fun getChats(email:String): MutableLiveData<RemoteResult<out Chat>> {
         viewModelScope.launch(Dispatchers.IO) {
-            Firestore.getChat().collect {
+            Firestore.getChat(email).collect {
                 liveChats.postValue(it)
             }
         }
