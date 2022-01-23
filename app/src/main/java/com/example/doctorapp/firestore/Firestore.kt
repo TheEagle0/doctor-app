@@ -101,10 +101,11 @@ object Firestore {
     fun getUser() = callbackFlow {
         send(RemoteResult.Loading)
         RemoteResult.success(
-            db.collection(USERS_COLLECTION).document(getDocumentToModify(savedEmail?:"")?:return@callbackFlow)
+            db.collection(USERS_COLLECTION)
+                .document(getDocumentToModify(savedEmail ?: "") ?: return@callbackFlow)
                 .addSnapshotListener { value, error ->
                     value?.let {
-                        val product = value.toObject(User::class.java)?:return@addSnapshotListener
+                        val product = value.toObject(User::class.java) ?: return@addSnapshotListener
                         GlobalScope.launch {
                             send(RemoteResult.success(product))
                         }
@@ -126,10 +127,10 @@ object Firestore {
     fun getChat(email: String) = callbackFlow {
         send(RemoteResult.Loading)
         RemoteResult.success(
-            db.collection(CHAT_COLLECTION).document(getChatDocs(email) ?:return@callbackFlow)
+            db.collection(CHAT_COLLECTION).document(getChatDocs(email) ?: return@callbackFlow)
                 .addSnapshotListener { value, error ->
                     value?.let {
-                        val product = value.toObject(Chat::class.java)?:return@addSnapshotListener
+                        val product = value.toObject(Chat::class.java) ?: return@addSnapshotListener
                         GlobalScope.launch {
                             send(RemoteResult.success(product))
                         }
@@ -167,4 +168,8 @@ object Firestore {
         }
         awaitClose { this.cancel() }
     }.flowOn(Dispatchers.IO)
+
+    fun logout() {
+        auth.signOut()
+    }
 }

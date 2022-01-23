@@ -59,6 +59,13 @@ class MainActivity : AppCompatActivity() {
                     R.id.nav_chats->{
                         navController.navigate(R.id.nav_chats)
                     }
+                    R.id.logout->{
+                        vm.logout().apply {
+                            navController.navigate(R.id.nav_login)
+                            this@MainActivity.recreate()
+                        }
+
+                    }
                 }
 
             }, 500)
