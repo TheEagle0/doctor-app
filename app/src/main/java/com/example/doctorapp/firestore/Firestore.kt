@@ -1,21 +1,25 @@
 package com.example.doctorapp.firestore
 
-import android.provider.Settings
+import com.example.doctorapp.extenssions.await
+import com.example.doctorapp.models.Chat
 import com.example.doctorapp.models.RemoteResult
+import com.example.doctorapp.models.User
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.*
 
+@DelicateCoroutinesApi
+@ExperimentalCoroutinesApi
 object Firestore {
     private val auth by lazy { FirebaseAuth.getInstance() }
+
+    private const val USERS_COLLECTION = "users"
+    private const val CHAT_COLLECTION = "chat"
 
     /**
      * Firebase Firestore settings.
@@ -50,4 +54,38 @@ object Firestore {
         awaitClose { this.cancel() }
     }.flowOn(Dispatchers.IO)
 
+
+    fun createUserWithEmailAndPassword(email: String, password: String, phone: String) =
+        callbackFlow {
+            send(RemoteResult.Loading)
+            RemoteResult.success(
+                auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        GlobalScope.launch(Dispatchers.IO) {
+                            val result: AuthResult? = it.result
+                            send(RemoteResult.success(result))
+                        }
+                    }
+                }
+            )
+            awaitClose { this.cancel() }
+        }.flowOn(Dispatchers.IO)
+
+    fun addUserDoc(user: User): Flow<RemoteResult<out DocumentReference>> = flow {
+        emit(RemoteResult.Loading)
+        val productDocumentReference: DocumentReference? =
+            db.collection(USERS_COLLECTION).add(user).await()
+        emit(RemoteResult.success(productDocumentReference!!))
+    }.catch {
+        emit(RemoteResult.Fail(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
+
+    fun addChatDoc(chat: Chat): Flow<RemoteResult<out DocumentReference>> = flow {
+        emit(RemoteResult.Loading)
+        val productDocumentReference: DocumentReference? =
+            db.collection(CHAT_COLLECTION).add(chat).await()
+        emit(RemoteResult.success(productDocumentReference!!))
+    }.catch {
+        emit(RemoteResult.Fail(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
 }

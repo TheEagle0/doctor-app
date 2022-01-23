@@ -6,10 +6,14 @@ import com.example.doctorapp.firestore.Firestore
 import com.example.doctorapp.main.MainViewModel
 import com.example.doctorapp.models.RemoteResult
 import com.google.firebase.auth.AuthResult
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+@ExperimentalCoroutinesApi
+@DelicateCoroutinesApi
 class LoginViewModel : MainViewModel() {
 
     private val liveSignIn = MutableLiveData<RemoteResult<out AuthResult?>>()

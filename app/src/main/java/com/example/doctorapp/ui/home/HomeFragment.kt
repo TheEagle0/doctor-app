@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.doctorapp.R
 import com.example.doctorapp.databinding.FragmentHomeBinding
 
@@ -34,6 +35,16 @@ class HomeFragment : Fragment() {
         homeViewModel.text.observe(viewLifecycleOwner, Observer {
         })
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        onFabClicked()
+    }
+
+    private fun onFabClicked() {
+        binding.addUser.setOnClickListener {
+            findNavController().navigate(R.id.nav_add_user)
+        }
     }
 
     override fun onDestroyView() {
