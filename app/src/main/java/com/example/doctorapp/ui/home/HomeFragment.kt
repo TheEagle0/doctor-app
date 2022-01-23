@@ -1,5 +1,7 @@
 package com.example.doctorapp.ui.home
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +36,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         onFabClicked()
         getUser()
+        onPhoneClicked()
     }
 
     private fun getUser() {
@@ -64,6 +67,18 @@ class HomeFragment : Fragment() {
         binding.addUser.setOnClickListener {
             findNavController().navigate(R.id.nav_add_user)
         }
+    }
+
+    private fun onPhoneClicked() {
+        binding.phone.setOnClickListener {
+            val phone = binding.phone.text
+            if (phone.isNotEmpty()) {
+                val intent = Intent(Intent.ACTION_DIAL)
+                intent.data = Uri.parse("tel:${phone}")
+                startActivity(intent)
+            }
+        }
+
     }
 
     override fun onDestroyView() {
